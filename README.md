@@ -47,7 +47,7 @@ from microutil.server.site import jsonrpc_site
 urlpatterns = [
     
     url(r'^json/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),   # 1.0.2
-    url(r'^jsonp/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),  # 1.0.3
+    url(r'^jsonp/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),  # >=1.0.3
 ]
 
 
