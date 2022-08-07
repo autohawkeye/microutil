@@ -22,7 +22,7 @@
 
 1. 安装插件包   
 
-pip3 install microutil==1.0.2
+pip3 install microutil==1.0.3
 
 
 2. 配置文件 setting.py 添加如下参数：
@@ -39,14 +39,15 @@ MICRO_CLIENT_TIMEOUT = 10   # 选配 客户端调用超时配置 默认为 10S
 
 
 
-3. 路由文件  urls.py 新增配置
+3. 路由文件  urls.py 新增配置, 根据对应的版本增加相应的配置
 
 from django.conf.urls import url
 from microutil.server.site import jsonrpc_site
 
 urlpatterns = [
     
-    url(r'^json/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),
+    url(r'^json/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),   # 1.0.2
+    url(r'^jsonp/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),  # 1.0.3
 ]
 
 
