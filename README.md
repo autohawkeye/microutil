@@ -16,10 +16,15 @@ pip install microutil==1.0.2
 2. 配置文件 setting.py 添加如下参数：
 
 MICRO_ZK_HOST = '127.0.0.1'  # 必填  默认为 127.0.0.1
+
 MICRO_ZK_PORT = 2181    # 必填 默认为 2181
+
 MICRO_HTTP_PORT = 8000  # 必填  默认为 8000， 这个地址为项目对外服务的端口，两者是一样的。
+
 MICRO_SERVICE_NAME = 'micro'    # 必填 默认为 micro， 项目名称，全局唯一
+
 MICRO_CLIENT_TIMEOUT = 10   # 选配 客户端调用超时配置 默认为 10S
+
 
 3. 路由文件  urls.py 新增配置
 
