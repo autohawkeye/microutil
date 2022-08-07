@@ -34,7 +34,7 @@ class HttpRpcClient(object):
         try:
             zk_client = ZKClient()
             service_ip, service_port = zk_client.get_connection(method_name)
-            req = urllib_request.Request('http://' + service_ip + ':' + str(service_port) + '/json/', data, headers)
+            req = urllib_request.Request('http://' + service_ip + ':' + str(service_port) + '/jsonp/', data, headers)
             if hasattr(settings, 'MICRO_CLIENT_TIMEOUT'):
                 time_out = settings.MICRO_CLIENT_TIMEOUT
             else:
