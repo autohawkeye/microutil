@@ -121,3 +121,6 @@ default_app_config = 'micro.apps.MainConfig'
 
 7. 使用过程中如果遇到了问题，可以联系作者本人：
 加微信号：daqiangge2008
+
+
+8. 项目借鉴了其它开源项目的部分代码和实现思想，非常感谢这些开源的前辈们。
