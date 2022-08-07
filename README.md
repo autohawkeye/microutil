@@ -1,4 +1,6 @@
-# microutil
+# 基于django框架集成zookeeper分布式微服务的服务注册与发现工具包，方便HTTP远程调用
+
+
 
 简要：
 
