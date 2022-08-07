@@ -1,17 +1,24 @@
 # microutil
 
-简要：基于django框架集成zookeeper分布式微服务的服务注册与发现工具包，方便HTTP远程调用
+简要：
+基于django框架集成zookeeper分布式微服务的服务注册与发现工具包，方便HTTP远程调用
+
 
 实现逻辑：
 通过python的装饰器实现类，方法的自动注册到zookeeper上去，目前支持类注解，下面所有的方法均可注册到ZK。客户端通过服务发现去寻找具体的服务器地址，再通过HTTP调用方式获取相关的接口数据。
 
+
 使用场景：
 对于具有大量的后端服务之间的接口调用，类似于JAVA 之间的DUBBO接口调用一样，只不过这里使用的是HTTP 的方法，并没有使用DUBBO方式，也可以对于一些喜欢技术研究的人使用。
 
+
 快速上手：
+
+
 1. 安装插件包   
 
 pip3 install microutil==1.0.2
+
 
 2. 配置文件 setting.py 添加如下参数：
 
@@ -26,6 +33,7 @@ MICRO_SERVICE_NAME = 'micro'    # 必填 默认为 micro， 项目名称，全�
 MICRO_CLIENT_TIMEOUT = 10   # 选配 客户端调用超时配置 默认为 10S
 
 
+
 3. 路由文件  urls.py 新增配置
 
 from django.conf.urls import url
@@ -35,6 +43,7 @@ urlpatterns = [
     
     url(r'^json/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),
 ]
+
 
 4. 测试样例：（以下代码上面的项目中都有）
 
@@ -87,6 +96,7 @@ def get_test(request):
     return JsonResponse(ret)
     
     
+    
 5. 以上的配置适应于本地开发和部署，如果要部署生产环境时则需要另外的预加载配置，样例使用uwsgi 部署
 
 新增 apps.py 文件， 作用为uwsgi 启动的时候先要加载提供服务的方法。否则无法注册到zk.
@@ -105,7 +115,9 @@ class MainConfig(AppConfig):
 
 default_app_config = 'micro.apps.MainConfig'
 
+
 6. 以下代码在项目中均有，此处只是说明一下用处。
+
 
 7. 使用过程中如果遇到了问题，可以联系作者本人：
 加微信号：daqiangge2008
