@@ -11,7 +11,7 @@
 快速上手：
 1. 安装插件包   
 
-pip install microutil==1.0.2
+pip3 install microutil==1.0.2
 
 2. 配置文件 setting.py 添加如下参数：
 
