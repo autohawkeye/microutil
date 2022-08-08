@@ -20,6 +20,6 @@ from .views import test_views
 
 urlpatterns = [
     path('get/test123', test_views.get_test),
-    url(r'^json/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),  # 1.0.2 版本
-    # url(r'^jsonp/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),  # >=1.0.3 版本
+    # url(r'^json/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),  # 1.0.2 版本
+    url(r'^jsonp/', jsonrpc_site.dispatch, name='jsonrpc_mountpoint'),  # >=1.0.3 版本
 ]

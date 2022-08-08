@@ -1,5 +1,6 @@
 from uuid import uuid1
 from microutil._json import loads, dumps
+from microutil.md5 import Md5
 from microutil.server.discovery import ZkRpcDiscovery
 from microutil.server.method import RpcMethod
 from microutil.server.serialize import BinarySerialize
@@ -79,6 +80,18 @@ class HttpRpcSite(object):
                         req = loads(request.body.decode('utf-8'))
                     else:
                         req = loads(request.raw_post_data.decode('utf-8'))
+                    micro_request_id = request.META.get('HTTP_MICRO_REQUEST_ID')
+                    auth_token = request.META.get('HTTP_MICRO_AUTH_TOKEN')
+                    if hasattr(settings, 'MICRO_SERVER_AUTHENTICATION_TOKEN'):
+                        server_token = settings.MICRO_SERVER_AUTHENTICATION_TOKEN
+                        if server_token:
+                            check_auth_token = Md5.get_md5_str(3 * (server_token + micro_request_id))
+                        else:
+                            check_auth_token = Md5.get_md5_str(3 * (2 * 'micro' + micro_request_id))
+                    else:
+                        check_auth_token = Md5.get_md5_str(3 * (2 * 'micro' + micro_request_id))
+                    if check_auth_token != auth_token:
+                        return HttpResponse('认证信息为空或错误', status=401, content_type='application/json-rpc')
                 except:
                     raise InvalidRequestError
 
@@ -102,7 +115,6 @@ class HttpRpcSite(object):
             json_rpc = dumps(response, cls=json_encoder)
         bin_serialize = BinarySerialize.serialize(json_rpc)
         if len(bin_serialize) > RpcCompress.enableCompressLen:
-            print(Compress.compress(bin_serialize))
             bin_serialize = b'1' + Compress.compress(bin_serialize)
         else:
             bin_serialize = b'0' + bin_serialize

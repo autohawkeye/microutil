@@ -53,7 +53,7 @@ class ZKClient(object):
         serv = service_name.split(':')[0]
         if not GlobalObject.node_servers.get(serv):
             self._get_servers(service_name)
-        print(GlobalObject.node_servers.get(serv))
+        # print(GlobalObject.node_servers.get(serv))
         return random.choice(GlobalObject.node_servers.get(serv))
 
     def get_connection(self, service_name):
@@ -64,7 +64,7 @@ class ZKClient(object):
         service_port = None
         while True:
             server = self._get_server(service_name)
-            print('server:%s' % server)
+            # print('server:%s' % server)
             try:
                 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
                 sock.settimeout(3)

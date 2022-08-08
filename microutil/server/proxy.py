@@ -7,6 +7,7 @@ from microutil.compress import Compress
 from microutil._json import loads, dumps
 from microutil.server.zookeeper import ZKClient
 from microutil.wrap import retryTimes
+from microutil.md5 import Md5
 from django.conf import settings
 
 
@@ -15,22 +16,34 @@ class HttpRpcClient(object):
     @staticmethod
     @retryTimes(retry_times=3)
     def call(method_name, *args, **kwargs):
+        if len(method_name.split(':')) != 2:
+            raise Exception('方法名称格式不正确，格式应为<服务名:方法名>')
         method_name_l = method_name.split(':')[1]
+        service_name = method_name.split(':')[0]
+        request_id = str(uuid.uuid1())
         data = dumps(
             {
                 'version': '1.0',
                 'method': method_name_l,
                 'args': args,
                 'kwargs': kwargs,
-                'request_id': str(uuid.uuid1())
+                'request_id': request_id
             }
         ).encode('utf-8')
-        print(data)
         headers = {
-            'Content-Type': 'application/json-rpc',
-            'Accept': 'application/json-rpc',
-            'Content-Length': len(data)
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Content-Length': len(data),
+            'micro-request-id': request_id
         }
+        if hasattr(settings, 'MICRO_REMOTE_SERVER_AUTHENTICATION_TOKEN'):
+            remote_tokens = settings.MICRO_REMOTE_SERVER_AUTHENTICATION_TOKEN
+            if remote_tokens.get(service_name):
+                headers['micro-auth-token'] = Md5.get_md5_str(3 * (remote_tokens.get(service_name) + request_id))
+            else:
+                headers['micro-auth-token'] = Md5.get_md5_str(3 * (2 * 'micro' + request_id))
+        else:
+            headers['micro-auth-token'] = Md5.get_md5_str(3 * (2 * 'micro' + request_id))
         try:
             zk_client = ZKClient()
             service_ip, service_port = zk_client.get_connection(method_name)
@@ -61,7 +74,6 @@ class HttpRpcClient(object):
             resp_dict = loads(BinarySerialize.unserialize(Compress.decompress(bin_data)))
         else:
             resp_dict = loads(BinarySerialize.unserialize(bin_data))
-        print(resp_dict)
         if resp_dict.get('error'):
             print(resp_dict)
         else:

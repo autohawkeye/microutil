@@ -44,7 +44,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -108,6 +108,10 @@ MICRO_ZK_PORT = 2181    # 必填
 MICRO_HTTP_PORT = 8000  # 必填  默认为 8000
 MICRO_SERVICE_NAME = 'micro'    # 必填 默认为 micro
 MICRO_CLIENT_TIMEOUT = 10   # 客户端调用超时配置 默认为 10S
+MICRO_SERVER_AUTHENTICATION_TOKEN = 'abcdfdapfadf'  # 选配 配置本服务的访问认证Token， 不配置则没有安全认证
+MICRO_REMOTE_SERVER_AUTHENTICATION_TOKEN = {
+    'micro': 'abcdfdapfadf'
+}  # 配置调用远程服务的访问认证Token， key：服务名, value: 具体的token值，如果远程服务没有安全认证，可不配置
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
