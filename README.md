@@ -99,13 +99,17 @@ from django.http import JsonResponse
 from microutil.server.proxy import HttpRpcClient
 
 def get_test(request):
+
     res = HttpRpcClient.call('micro:HttpRpcService.get_string_v1', 'zhangsan')   #重点讲一下  第一个参数组成：项目名称:类名:方法名  或者 项目名称:方法名（针对于有的是方法级的注册）， 第二个参数为传值，
+    
     print(res)
+    
     ret = {
         'result': 1,
         'msg': '请求成功',
         'data': res
     }
+    
     return JsonResponse(ret)
     
     
