@@ -22,7 +22,7 @@
 
 1. 安装插件包   
 
-pip3 install microutil==1.0.4
+pip3 install microutil==1.0.5
 
 
 2. 配置文件 setting.py 添加如下参数：
