@@ -48,6 +48,7 @@ MICRO_REMOTE_SERVER_AUTHENTICATION_TOKEN = {
 
 from django.conf.urls import url
 from microutil.server.site import jsonrpc_site
+import micro.dubbo.http_views   #导入要提供服务的文件
 
 urlpatterns = [
     
