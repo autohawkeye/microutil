@@ -22,7 +22,7 @@
 
 1. 安装插件包   
 
-pip3 install microutil==1.0.3
+pip3 install microutil==1.0.5
 
 
 2. 配置文件 setting.py 添加如下参数：
@@ -37,12 +37,18 @@ MICRO_SERVICE_NAME = 'micro'    # 必填 默认为 micro， 项目名称，全�
 
 MICRO_CLIENT_TIMEOUT = 10   # 选配 客户端调用超时配置 默认为 10S
 
+MICRO_SERVER_AUTHENTICATION_TOKEN = 'abcdfdapfadf'  # 选配 配置本服务的访问认证Token， 不配置则没有安全认证  >= 1.0.4
+
+MICRO_REMOTE_SERVER_AUTHENTICATION_TOKEN = {
+    'micro': 'abcdfdapfadf'
+}  # 配置调用远程服务的访问认证Token， key：服务名, value: 具体的token值，如果远程服务没有安全认证，可不配置  >= 1.0.4
 
 
 3. 路由文件  urls.py 新增配置, 根据对应的版本增加相应的配置
 
 from django.conf.urls import url
 from microutil.server.site import jsonrpc_site
+import micro.dubbo.http_views   #导入要提供服务的文件
 
 urlpatterns = [
     
@@ -89,16 +95,21 @@ class HttpRpcServiceV:
 
 
 from django.http import JsonResponse
+
 from microutil.server.proxy import HttpRpcClient
 
 def get_test(request):
+
     res = HttpRpcClient.call('micro:HttpRpcService.get_string_v1', 'zhangsan')   #重点讲一下  第一个参数组成：项目名称:类名:方法名  或者 项目名称:方法名（针对于有的是方法级的注册）， 第二个参数为传值，
+    
     print(res)
+    
     ret = {
         'result': 1,
         'msg': '请求成功',
         'data': res
     }
+    
     return JsonResponse(ret)
     
     
