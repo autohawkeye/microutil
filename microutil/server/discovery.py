@@ -1,9 +1,8 @@
 import json
-from kazoo.client import KazooClient
 from django.conf import settings
+from microutil.server import GlobalZkClient
 
 
-# TCP服务端绑定端口开启监听，同时将自己注册到zk
 class ZkRpcDiscovery(object):
     __slots__ = ('host', 'port', 'service_name', 'service_host', 'service_port', 'zk')
 
@@ -13,8 +12,8 @@ class ZkRpcDiscovery(object):
         self.service_name = service_name
         self.service_host = service_host
         self.service_port = service_port
-        self.zk = KazooClient(hosts=host + ':' + str(port))
-        self.zk.start()
+        # self.zk = KazooClient(hosts=host + ':' + str(port))
+        # self.zk.start()
 
     def register_zk(self):
         """
@@ -26,4 +25,4 @@ class ZkRpcDiscovery(object):
             micro_service_name = 'micro'
         value = json.dumps({'host': self.service_host, 'port': self.service_port})
         # 创建服务子节点
-        self.zk.create('/dubbo/' + micro_service_name + '/' + self.service_name + '/provider/', value.encode(), ephemeral=True, sequence=True, makepath=True)
+        GlobalZkClient.zkClient.create('/dubbo/' + micro_service_name + '/' + self.service_name + '/provider/', value.encode(), ephemeral=True, sequence=True, makepath=True)
