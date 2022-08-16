@@ -22,7 +22,7 @@
 
 1. 安装插件包   
 
-pip3 install microutil==1.0.6
+pip3 install microutil==1.0.7
 
 
 2. 配置文件 setting.py 添加如下参数：
@@ -125,7 +125,7 @@ class MainConfig(AppConfig):
     name = 'micro'  # app名称
 
     def ready(self):
-        from micro.dubbo import http_views
+        from microutil.server import GlobalZkClient
         print('我被执行了！')
 
 与上面同级目录下面 __init__.py, 新增下面的配置
