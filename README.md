@@ -22,18 +22,18 @@
 
 1. 安装插件包   
 
-pip3 install microutil==1.0.7
+pip3 install microutil==1.0.8
 
 
 2. 配置文件 setting.py 添加如下参数：
 
-MICRO_ZK_HOST = '127.0.0.1'  # 必填  默认为 127.0.0.1
+MICRO_ZK_HOST = '127.0.0.1'  # 必配  默认为 127.0.0.1
 
-MICRO_ZK_PORT = 2181    # 必填 默认为 2181
+MICRO_ZK_PORT = 2181    # 必配 默认为 2181
 
-MICRO_HTTP_PORT = 8000  # 必填  默认为 8000， python manage.py runserver 0.0.0.0:8000 这个地址为项目对外服务的端口，两者是一样的。
+MICRO_HTTP_PORT = 8000  # 选配（需要提供对外的RPC服务）  默认为 8000， python manage.py runserver 0.0.0.0:8000 这个地址为项目对外服务的端口，两者是一样的。
 
-MICRO_SERVICE_NAME = 'micro'    # 必填 默认为 micro， 项目名称，全局唯一
+MICRO_SERVICE_NAME = 'micro'    # 选配（需要提供对外的RPC服务） 项目名称，全局唯一
 
 MICRO_CLIENT_TIMEOUT = 10   # 选配 客户端调用超时配置 默认为 10S
 
@@ -41,7 +41,7 @@ MICRO_SERVER_AUTHENTICATION_TOKEN = 'abcdfdapfadf'  # 选配 配置本服务的�
 
 MICRO_REMOTE_SERVER_AUTHENTICATION_TOKEN = {
     'micro': 'abcdfdapfadf'
-}  # 配置调用远程服务的访问认证Token， key：服务名, value: 具体的token值，如果远程服务没有安全认证，可不配置  >= 1.0.4
+}  # 选配 配置调用远程服务的访问认证Token， key：服务名, value: 具体的token值，如果远程服务没有安全认证，可不配置  >= 1.0.4
 
 
 3. 路由文件  urls.py 新增配置, 根据对应的版本增加相应的配置
