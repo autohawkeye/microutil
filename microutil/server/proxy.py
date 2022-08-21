@@ -46,7 +46,7 @@ class HttpRpcClient(object):
             headers['micro-auth-token'] = Md5.get_md5_str(3 * (2 * 'micro' + request_id))
         try:
             zk_client = ZKClient()
-            service_ip, service_port = zk_client.get_connection(method_name)
+            service_ip, service_port = zk_client.get_connection(service_name)
             req = urllib_request.Request('http://' + service_ip + ':' + str(service_port) + '/jsonp/', data, headers)
             if hasattr(settings, 'MICRO_CLIENT_TIMEOUT'):
                 time_out = settings.MICRO_CLIENT_TIMEOUT
@@ -58,7 +58,8 @@ class HttpRpcClient(object):
                 if e.code not in (
                         401, 403
                 ) and e.headers['Content-Type'] == 'application/json-rpc':
-                    return e.read().decode('utf-8')  # we got a jsonrpc-formatted respnose
+                    dat = e.read()
+                    return BinarySerialize.unserialize(dat[1:])  # we got a jsonrpc-formatted respnose
                 raise ServiceProxyException(e.code, e.headers, req)
             else:
                 raise e

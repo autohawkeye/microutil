@@ -1,11 +1,10 @@
 from uuid import uuid1
 from microutil._json import loads, dumps
 from microutil.md5 import Md5
-from microutil.server.discovery import ZkRpcDiscovery
 from microutil.server.method import RpcMethod
+from microutil.server import GlobalZkClient
 from microutil.server.serialize import BinarySerialize
 from microutil.server.compress import RpcCompress
-from microutil.util import local_ip
 from microutil.compress import Compress
 from microutil.exceptions import *
 
@@ -39,10 +38,6 @@ class HttpRpcSite(object):
 
     def set_json_encoder(self, json_encoder=DjangoJSONEncoder):
         self.json_encoder = json_encoder
-
-    # def register(self, name, method):
-    #     print(name, method)
-    #     self.urls[smart_text(name)] = method
 
     def empty_response(self, version='1.0'):
         resp = {'request_id': None}
@@ -136,7 +131,6 @@ class HttpRpcSite(object):
             else:
                 cls.funcMap[func.__name__] = RpcMethod(RpcMethod.TYPE_WITHOUT_CLASS, func)
                 cls.funcList = cls.funcMap.keys()
-            HttpRpcSite.register_zk(func.__name__)
         else:
             classDefine = func
             serMethods = list(filter(lambda m: not m.startswith('_'), dir(classDefine)))
@@ -149,25 +143,6 @@ class HttpRpcSite(object):
                 else:
                     cls.funcMap[funcName] = RpcMethod(RpcMethod.TYPE_WITH_CLASS, funcObj, classDefine)
                     cls.funcList = cls.funcMap.keys()
-                HttpRpcSite.register_zk(funcName)
-
-    @staticmethod
-    def register_zk(method_name):
-        print(method_name)
-        if hasattr(settings, 'MICRO_ZK_HOST'):
-            zk_host = settings.MICRO_ZK_HOST
-        else:
-            zk_host = '127.0.0.1'
-        if hasattr(settings, 'MICRO_ZK_PORT'):
-            zk_port = settings.MICRO_ZK_PORT
-        else:
-            zk_port = 2181
-        if hasattr(settings, 'MICRO_HTTP_PORT'):
-            micro_http_port = settings.MICRO_HTTP_PORT
-        else:
-            micro_http_port = 8000
-        zkRpc = ZkRpcDiscovery(zk_host, zk_port, method_name, local_ip(), micro_http_port)
-        zkRpc.register_zk()
 
 
 rpc = HttpRpcSite.rpc
